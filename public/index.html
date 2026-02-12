@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student App</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login" class="center-screen">
+    <div class="overlay">
+      <h2>Welcome Student 👋</h2>
+      <input type="text" id="name" placeholder="Enter Name">
+      <input type="email" id="email" placeholder="Enter Email">
+      <button onclick="openDept()">Continue</button>
+    </div>
+  </div>
+
+  <!-- DEPARTMENT SCREEN -->
+  <div id="dept" class="hidden">
+    <header>
+      <button class="back-btn" onclick="goBack('login')">⬅ Back</button>
+      <h1>Select Department 🎓</h1>
+    </header>
+    <div class="container dept-grid">
+      <div class="dept-box" onclick="openEssentials()">CSE</div>
+      <div class="dept-box" onclick="openEssentials()">CSM</div>
+      <div class="dept-box" onclick="openEssentials()">CSC</div>
+      <div class="dept-box" onclick="openEssentials()">CSD</div>
+      <div class="dept-box" onclick="openEssentials()">IT</div>
+      <div class="dept-box" onclick="openEssentials()">AIML</div>
+      <div class="dept-box" onclick="openEssentials()">AIDS</div>
+      <div class="dept-box" onclick="openEssentials()">ECE</div>
+      <div class="dept-box" onclick="openEssentials()">EEE</div>
+      <div class="dept-box" onclick="openEssentials()">BPHARM</div>
+      <div class="dept-box" onclick="openEssentials()">CIVIL</div>
+      <div class="dept-box" onclick="openEssentials()">MECH</div>
+      <div class="dept-box" onclick="openEssentials()">OTHER</div>
+    </div>
+  </div>
+
+  <!-- ESSENTIALS SCREEN -->
+  <div id="essentials" class="hidden">
+    <header>
+      <button class="back-btn" onclick="goBack('dept')">⬅ Back</button>
+      <h1>Essentials 📚</h1>
+    </header>
+    <div class="container">
+      <div class="grid">
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-book-open"></i></div>
+          <p class="title">Assignments</p>
+        </div>
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-file-alt"></i></div>
+          <p class="title">Records</p>
+        </div>
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-display"></i></div>
+          <p class="title">PPT</p>
+        </div>
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-pen-to-square"></i></div>
+          <p class="title">Exams</p>
+        </div>
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-palette"></i></div>
+          <p class="title">Graphics</p>
+        </div>
+        <div class="box" onclick="openUpload()">
+          <div class="icon-circle"><i class="fa-solid fa-question-circle"></i></div>
+          <p class="title">Doubts</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD SCREEN -->
+  <div id="upload" class="hidden upload-page">
+    <header>
+      <button class="back-btn" onclick="goBack('essentials')">⬅ Back</button>
+      <h1>Upload 📤</h1>
+    </header>
+    <div class="chat-container" id="chatContainer"></div>
+
+    <div class="upload-options">
+      <button onclick="uploadPDF()">📑 PDF</button>
+      <button onclick="uploadLink()">🔗 Link</button>
+      <button onclick="uploadPhoto()">📷 Photo</button>
+    </div>
+
+    <input type="file" id="pdfInput" accept="application/pdf" hidden>
+    <input type="file" id="photoInput" accept="image/*" hidden>
+  </div>
+
+  <!-- STUDENTS LIST SCREEN -->
+  <div id="students" class="hidden">
+    <header>
+      <button class="back-btn" onclick="goBack('dept')">⬅ Back</button>
+      <h1>All Students 👩‍🎓👨‍🎓</h1>
+    </header>
+    <div class="container">
+      <table id="studentsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script src="script.js"></script>
+
+</body>
+</html>
