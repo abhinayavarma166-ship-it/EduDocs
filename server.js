@@ -9,14 +9,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 /* ================= IN-MEMORY STORAGE ================= */
 let students = [];
 let otpStore = {};
 let pendingUploads = [];
 let costMessages = {};
-let adminSessions = {};
+let adminSessions = {}; // simple admin login session
 
 /* ================= ADMIN LOGIN ================= */
 const ADMIN_EMAIL = "nmap2420@gmail.com";
@@ -42,11 +42,9 @@ function verifyAdmin(req, res, next) {
   next();
 }
 
-/* ================= EMAIL SETUP (FAST SMTP) ================= */
+/* ================= EMAIL SETUP ================= */
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  service: "gmail",
   auth: {
     user: "nmap2420@gmail.com",
     pass: "yxbc sodd sunt sdhk"
@@ -62,7 +60,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* ================= SEND OTP (FAST RESPONSE) ================= */
+/* ================= OTP ================= */
 app.post("/send-otp", async (req, res) => {
   const { name, email } = req.body;
 
@@ -72,23 +70,20 @@ app.post("/send-otp", async (req, res) => {
   const otp = Math.floor(100000 + Math.random() * 900000);
   otpStore[email] = otp;
 
-  // respond immediately
-  res.json({ success: true });
-
-  // send email in background
   try {
     await transporter.sendMail({
       from: "Student App",
       to: email,
       subject: "Your OTP Code",
-      text: Hello ${name}, your OTP is ${otp}
+      text: `Hello ${name}, your OTP is ${otp}`
     });
-  } catch (err) {
-    console.log("Email error:", err);
+
+    res.json({ success: true });
+  } catch {
+    res.status(500).json({ error: "Email failed" });
   }
 });
 
-/* ================= VERIFY OTP ================= */
 app.post("/verify-otp", (req, res) => {
   const { name, email, otp } = req.body;
 
@@ -115,13 +110,13 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       file: req.file
     });
 
-    let text = Student: ${name}\nEmail: ${email}\nType: ${type};
-    if (link) text += \nLink: ${link};
+    let text = `Student: ${name}\nEmail: ${email}\nType: ${type}`;
+    if (link) text += `\nLink: ${link}`;
 
     const mailOptions = {
       from: "Student App",
       to: ADMIN_EMAIL,
-      subject: New ${type} uploaded by ${name},
+      subject: `New ${type} uploaded by ${name}`,
       text
     };
 
@@ -134,8 +129,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     res.json({ success: true });
-  } catch (err) {
-    console.log(err);
+  } catch {
     res.status(500).json({ error: "Upload/email failed" });
   }
 });
@@ -182,13 +176,13 @@ app.post("/payment-response", (req, res) => {
   const { email, confirmed } = req.body;
 
   console.log(
-    Payment from ${email}: ${confirmed ? "CONFIRMED" : "DECLINED"}
+    `Payment from ${email}: ${confirmed ? "CONFIRMED" : "DECLINED"}`
   );
 
   res.json({ success: true });
 });
 
-/* ================= START SERVER ================= */
+/* ================= START ================= */
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running at http://localhost:${PORT}`);
 });
